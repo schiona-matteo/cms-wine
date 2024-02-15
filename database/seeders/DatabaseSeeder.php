@@ -14,12 +14,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        \App\Models\User::create([
+            'name' => 'KIBOKO SRL',
+            'email' => 'info@kiboko.it',
+            'type' => 'admin',
+            'password' => '$2y$10$NQ36WazKgeJE7FfvMzFSauZ7x8sH77fWRDM51JGaowvtRzrk9IYWu',
+        ]);
 
         \App\Models\User::create([
             'name' => 'Matteo Schiona',
-            'email' => 'dev@heki.io',
-            'password' => '$2y$10$NQ36WazKgeJE7FfvMzFSauZ7x8sH77fWRDM51JGaowvtRzrk9IYWu',
+            'email' => 'schiona.matteo@gmail.com',
+            'type' => 'operator',
+            'password' => '$2y$10$NjTAkhk3jO8HuIjI.HJ.xepf3fy.h6ITsWqQoIflKg90mgDDsOXPW',
         ]);
     }
 }

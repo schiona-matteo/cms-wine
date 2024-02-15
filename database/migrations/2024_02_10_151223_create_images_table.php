@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('product_id');
-            $table->unsignedInteger('variant_id')->nullable()->default(null);
+            $table->foreignId('product_id')->constrained();
+            $table->foreignId('variant_id')->nullable()->default(null)->constrained();
             $table->unsignedTinyInteger('sort')->default(0);
             $table->string('disk')->default('local');
             $table->string('path');

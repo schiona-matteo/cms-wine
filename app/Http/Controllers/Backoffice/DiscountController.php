@@ -3,31 +3,30 @@
 namespace App\Http\Controllers\Backoffice;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Discount;
 use App\Trait\Backoffice\ResourcesSkeleton;
-use Hash;
 use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class DiscountController extends Controller
 {
     use ResourcesSkeleton;
 
-    protected static $model = User::class;
+    protected static $model = Discount::class;
 
     public function getView()
     {
-        return view('backoffice.users');
+        return view('backoffice.discounts');
     }
 
     public function apiList()
     {
         $result = self::apiListTemplate(self::$model, [
-            'id', 'type', 'source', 'name', 'email', 'birthday', 'created_at',
+            'id', 'name', 'code', 'type', 'usage_limit', 'usage_limit_user', 'count', 'expires_at', 'created_at',
         ], [
             'type' => '=',
-            'source' => '=',
+            'code' => 'LIKE',
             'name' => 'LIKE',
-            'email' => 'LIKE',
+            'expires_at' => 'BETWEEN',
             'created_at' => 'BETWEEN',
         ]);
 
@@ -38,16 +37,12 @@ class UserController extends Controller
     {
         $result = self::apiPatchOrCreateTemplate(self::$model, [
             'name' => 'required',
-            'email' => [
+            'code' => ['required', Rule::unique('discounts')->ignore(request('id', null), 'id')],
+            'type' => [
                 'required',
-                'email',
-                Rule::unique('users')->ignore(request('id', null), 'id'),
+                'in:fixed,percentage,shipment',
             ],
-        ], ['email', 'name', 'type', 'source', 'birthday'], function ($object) {
-            if (request('password') != null) {
-                $object->password = Hash::make(request('password'));
-            }
-        });
+        ], ['name', 'code', 'type', 'usage_limit', 'usage_limit_user', 'expires_at']);
 
         return responseSuccess([
             'object' => $result,
@@ -56,9 +51,7 @@ class UserController extends Controller
 
     public function apiDelete()
     {
-        $result = self::apiDeleteTemplate(self::$model, function ($object) {
-            return $object->id != auth()->user()->id;
-        });
+        $result = self::apiDeleteTemplate(self::$model);
 
         if ($result['status'] == true) {
             return responseSuccess();
@@ -74,7 +67,7 @@ class UserController extends Controller
 
     public function apiSearch()
     {
-        $result = self::apiSearchTemplate(self::$model, ['id', 'name', 'email']);
+        $result = self::apiSearchTemplate(self::$model, ['id', 'name', 'code']);
 
         return response()->json([
             'items' => $result->get(),

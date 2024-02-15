@@ -48,26 +48,13 @@
                 </div>
             </div>
         </div>
-        <k-table
-            ref="table"
-            :filters="filters"
-            :columns="tableColumn"
-            fetch-url="/backoffice/api/users"
-            @addClicked="$root.openModal(modal, 'update', emptyModel)"
-            @updateClicked="$root.openModal(modal, 'update', $event)"
-            @deleteClicked="$root.openModal(modal, 'delete', $event)">
+        <k-table ref="table" :filters="filters" :columns="tableColumn" fetch-url="/backoffice/api/products" @addClicked="openNewProductPage">
             <template v-slot:column-type="data"
                 ><span :class="['inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ', types[data.row.type].class]">
                     {{ types[data.row.type].label }}
                 </span></template
             >
             <template v-slot:column-created_at="data">{{ dayjs(data.row.created_at).format("DD/MM/YYYY HH:mm") }}</template>
-            <template v-slot:column-birthday="data">
-                <span v-if="data.row.birthday">
-                    {{ dayjs(data.row.birthday).format("DD/MM/YYYY") }}
-                </span>
-                <span v-else>N/D</span>
-            </template>
             <template v-slot:column-actions="data">
                 <span class="relative z-0 inline-flex shadow-sm rounded-md">
                     <a
@@ -95,15 +82,6 @@
             </template>
         </k-table>
 
-        <update-modal
-            v-if="modal.update.show"
-            :element="modal.update.element"
-            componentName="user"
-            :validations="validations"
-            @closed="$root.closeModal(modal, 'update')"
-            @confirmed="confirmModal('update')"
-            :sending="modal.update.sending"
-            title="Scheda utente"></update-modal>
         <delete-modal v-if="modal.delete.show" @closed="$root.closeModal(modal, 'delete')" @confirmed="confirmModal('delete')" :sending="modal.delete.sending"></delete-modal>
     </div>
 </template>
@@ -117,66 +95,46 @@
                 tableColumn: [
                     { key: "id", title: "ID" },
                     { key: "type", title: "Tipologia" },
-                    { key: "source", title: "Origine" },
                     { key: "name", title: "Nome" },
-                    { key: "email", title: "Email" },
-                    { key: "birthday", title: "Data di nascita" },
-                    { key: "created_at", title: "Data inserimento" },
+                    { key: "category", title: "Cateogria" },
+                    { key: "available_for_order", title: "In vendita" },
+                    { key: "visibility", title: "Visibilità" },
+                    { key: "is_virtual", title: "Virtuale" },
+                    { key: "created_at", title: "Data creazione" },
                     { key: "actions", title: "Azioni" },
                 ],
                 types: {
-                    admin: { id: "admin", label: "Amministratore", class: "bg-red-50 text-red-700 ring-red-600/20" },
-                    operator: { id: "operator", label: "Operatore", class: "bg-yellow-50 text-yellow-700 ring-yellow-600/20" },
-                    user: { id: "user", label: "Utente", class: "bg-green-50 text-green-700 ring-green-600/20" },
-                    guest: { id: "guest", label: "Ospite", class: "bg-gray-50 text-gray-700 ring-gray-600/20" },
+                    wine: { id: "wine", label: "Vino", class: "bg-red-50 text-red-700 ring-red-600/20" },
+                    grappa: { id: "grappa", label: "Grappa", class: "bg-yellow-50 text-yellow-700 ring-yellow-600/20" },
+                    accessory: { id: "accessory", label: "Accessori", class: "bg-green-50 text-green-700 ring-green-600/20" },
+                    visit: { id: "visit", label: "Visita", class: "bg-indigo-50 text-indigo-700 ring-indigo-600/20" },
                 },
                 modal: {
-                    update: {
-                        element: {},
-                        show: false,
-                        sending: false,
-                    },
                     delete: {
                         element: {},
                         show: false,
                         sending: false,
                     },
                 },
-                emptyModel: {
-                    id: null,
-                    email: "",
-                    name: "",
-                    password: "",
-                },
                 filters: {
                     name: "",
-                    email: "",
+                    type: "",
+                    category: "",
                     created_at: null,
                 },
                 validations: {},
             };
         },
-        created() {
-            let uri = window.location.search.substring(1);
-            let params = new URLSearchParams(uri);
-
-            if (params.get("email") != null) {
-                this.filters.email = params.get("email");
-            }
-
-            if (params.get("name") != null) {
-                this.filters.name = params.get("name");
-            }
-        },
         methods: {
+            openNewProductPage() {
+                window.location.href = "/backoffice/prodotti/nuovo";
+            },
             fetchData() {
                 this.$refs.table.fetchData();
             },
             confirmModal(type) {
                 if (type == "delete") {
                     this.doDelete();
-                } else {
-                    this.doUpdate();
                 }
             },
             doUpdate() {
@@ -184,7 +142,7 @@
                 this.validations = {};
 
                 this.$root.doUpdate(
-                    "/backoffice/api/user/patch-or-create",
+                    "/backoffice/api/product/patch-or-create",
                     this.modal.update.element,
                     (response) => {
                         this.modal.update.sending = false;
@@ -204,7 +162,7 @@
                 this.modal.delete.sending = true;
 
                 this.$root.doDelete(
-                    "/backoffice/api/user/delete",
+                    "/backoffice/api/product/delete",
                     this.modal.delete.element.id,
                     (response) => {
                         this.$root.$root.closeModal(this.modal, "delete");

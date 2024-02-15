@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('product_id');
+            $table->foreignId('product_id')->constrained();
             $table->string('code');
             $table->double('price');
             $table->float('weight')->default(0);

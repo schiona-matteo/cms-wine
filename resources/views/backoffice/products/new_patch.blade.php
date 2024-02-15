@@ -1,4 +1,4 @@
-@extends('layouts.admin_top')
+@extends('layouts.admin_left')
 
 @section('header')
 <nav class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex mb-6" aria-label="Breadcrumb">
@@ -20,17 +20,17 @@
         <svg class="flex-shrink-0 w-6 h-full text-gray-200" viewBox="0 0 24 44" preserveAspectRatio="none" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M.293 0l22 22-22 22h1.414l22-22-22-22H.293z" />
         </svg>
-        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Colori</a>
+        <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Prodotti</a>
       </div>
     </li>
   </ol>
 </nav>
 @endsection
 
-@section('content')
-    <!-- Replace with your content -->
-    <div class="py-4">
-        <colors-table />
-    </div>
-    <!-- /End replace -->
+@section('full_page')
+<div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8 bg-gray-100" style="min-height: calc(100vh - 5.25rem)">
+  <div class="py-4">
+    <product-create-or-patch :product="{{ $product }}" />
+  </div>
+</div>
 @endsection

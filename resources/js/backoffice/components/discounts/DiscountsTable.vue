@@ -52,7 +52,7 @@
             ref="table"
             :filters="filters"
             :columns="tableColumn"
-            fetch-url="/backoffice/api/users"
+            fetch-url="/backoffice/api/discounts"
             @addClicked="$root.openModal(modal, 'update', emptyModel)"
             @updateClicked="$root.openModal(modal, 'update', $event)"
             @deleteClicked="$root.openModal(modal, 'delete', $event)">
@@ -61,10 +61,11 @@
                     {{ types[data.row.type].label }}
                 </span></template
             >
+            <template v-slot:column-usage_limit="data">{{ data.row.count }} / {{ data.row.usage_limit }}</template>
             <template v-slot:column-created_at="data">{{ dayjs(data.row.created_at).format("DD/MM/YYYY HH:mm") }}</template>
-            <template v-slot:column-birthday="data">
-                <span v-if="data.row.birthday">
-                    {{ dayjs(data.row.birthday).format("DD/MM/YYYY") }}
+            <template v-slot:column-expires_at="data">
+                <span v-if="data.row.expires_at">
+                    {{ dayjs(data.row.expires_at).format("DD/MM/YYYY") }}
                 </span>
                 <span v-else>N/D</span>
             </template>
@@ -98,7 +99,7 @@
         <update-modal
             v-if="modal.update.show"
             :element="modal.update.element"
-            componentName="user"
+            componentName="discount"
             :validations="validations"
             @closed="$root.closeModal(modal, 'update')"
             @confirmed="confirmModal('update')"
@@ -117,18 +118,18 @@
                 tableColumn: [
                     { key: "id", title: "ID" },
                     { key: "type", title: "Tipologia" },
-                    { key: "source", title: "Origine" },
                     { key: "name", title: "Nome" },
-                    { key: "email", title: "Email" },
-                    { key: "birthday", title: "Data di nascita" },
-                    { key: "created_at", title: "Data inserimento" },
+                    { key: "code", title: "Codice" },
+                    { key: "expires_at", title: "Scadenza" },
+                    { key: "usage_limit", title: "Limite utilizzo" },
+                    { key: "usage_limit_user", title: "Limite a utente" },
+                    { key: "created_at", title: "Data creazione" },
                     { key: "actions", title: "Azioni" },
                 ],
                 types: {
-                    admin: { id: "admin", label: "Amministratore", class: "bg-red-50 text-red-700 ring-red-600/20" },
-                    operator: { id: "operator", label: "Operatore", class: "bg-yellow-50 text-yellow-700 ring-yellow-600/20" },
-                    user: { id: "user", label: "Utente", class: "bg-green-50 text-green-700 ring-green-600/20" },
-                    guest: { id: "guest", label: "Ospite", class: "bg-gray-50 text-gray-700 ring-gray-600/20" },
+                    percentage: { id: "percentage", label: "Importo percentuale", class: "bg-red-50 text-red-700 ring-red-600/20" },
+                    fixed: { id: "fixed", label: "Importo fisso", class: "bg-yellow-50 text-yellow-700 ring-yellow-600/20" },
+                    shipment: { id: "shipment", label: "Sconta spedizione", class: "bg-green-50 text-green-700 ring-green-600/20" },
                 },
                 modal: {
                     update: {
@@ -144,13 +145,19 @@
                 },
                 emptyModel: {
                     id: null,
-                    email: "",
                     name: "",
-                    password: "",
+                    code: "",
+                    type: "percentage",
+                    usage_limit: "",
+                    usage_limit_user: "",
+                    expires_at: null,
+                    created_at: null,
                 },
                 filters: {
                     name: "",
-                    email: "",
+                    code: "",
+                    type: "",
+                    expires_at: null,
                     created_at: null,
                 },
                 validations: {},
@@ -184,7 +191,7 @@
                 this.validations = {};
 
                 this.$root.doUpdate(
-                    "/backoffice/api/user/patch-or-create",
+                    "/backoffice/api/discount/patch-or-create",
                     this.modal.update.element,
                     (response) => {
                         this.modal.update.sending = false;
@@ -204,7 +211,7 @@
                 this.modal.delete.sending = true;
 
                 this.$root.doDelete(
-                    "/backoffice/api/user/delete",
+                    "/backoffice/api/discount/delete",
                     this.modal.delete.element.id,
                     (response) => {
                         this.$root.$root.closeModal(this.modal, "delete");

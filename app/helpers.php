@@ -134,7 +134,7 @@ function responseError($data = [])
     ], $data), 500);
 }
 
-function findOrCreateModel($class, $id)
+function findOrNewModel($class, $id)
 {
     if ($id) {
         $model = $class::findOrFail($id);

@@ -4,9 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+    use SoftDeletes;
+
+    public const VISIBILITY_PUBLIC = 'public';
+
+    public const VISIBILITY_LOGGED_IN = 'logged_in';
+
+    public const VISIBILITY_ONLY_MANUAL = 'only_manual';
+
     /**
      * The attributes that are mass assignable.
      *

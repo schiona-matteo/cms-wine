@@ -72,7 +72,7 @@
                 </div>
                 <div class="flex-shrink-0 flex bg-gray-700 p-4">
                     <div class="flex-shrink-0 w-full group block">
-                        <div class="flex items-center">
+                        <div class="flex flex-col space-y-8">
                             <div>
                                 <p class="text-sm font-medium text-white">
                                     {{ user.name }}
@@ -84,6 +84,9 @@
                                     <button class="text-sm font-medium text-white" @click="logout">Esci</button>
                                 </div>
                             </div>
+                            <div class="mx-auto">
+                                <img class="h-8 w-auto fill-white color-white" src="/kiboko-logo-expanded.svg" alt="KIBOKO LOGO" />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,7 +97,7 @@
 
 <script>
     import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from "@headlessui/vue";
-    import { HomeIcon, XMarkIcon, CogIcon } from "@heroicons/vue/24/outline";
+    import { HomeIcon, UserIcon, XMarkIcon, CogIcon } from "@heroicons/vue/24/outline";
     import HeaderMenuLeftNavigation from "./HeaderMenuLeftNavigation.vue";
     export default {
         components: {
@@ -104,6 +107,7 @@
             TransitionRoot,
             XMarkIcon,
             HomeIcon,
+            UserIcon,
             HeaderMenuLeftNavigation,
         },
         props: {
@@ -137,10 +141,24 @@
                         hasChild: false,
                     },
                     {
-                        name: "Colori",
-                        href: "/backoffice/colori",
-                        icon: HomeIcon,
-                        route_name: "backoffice.colors",
+                        name: "Prodotti",
+                        href: "/backoffice/prodotti",
+                        icon: UserIcon,
+                        route_name: "backoffice.products",
+                        hasChild: false,
+                    },
+                    {
+                        name: "Sconti",
+                        href: "/backoffice/sconti",
+                        icon: UserIcon,
+                        route_name: "backoffice.discounts",
+                        hasChild: false,
+                    },
+                    {
+                        name: "Utenti",
+                        href: "/backoffice/utenti",
+                        icon: UserIcon,
+                        route_name: "backoffice.users",
                         hasChild: false,
                     },
                     {

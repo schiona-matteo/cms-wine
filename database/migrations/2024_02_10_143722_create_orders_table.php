@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->enum('source', [
                 'negozio', 'sito', 'manuale',
             ])->default('sito');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('discount_id')->nullable()->default(null);
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('discount_id')->nullable()->default(null)->constrained();
             $table->string('reference');
             $table->double('shipment_price')->default(0);
             $table->double('product_price')->default(0);

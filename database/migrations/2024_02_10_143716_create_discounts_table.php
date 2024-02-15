@@ -23,6 +23,7 @@ return new class extends Migration {
             $table->unsignedInteger('usage_limit_user')->nullable()->default(null);
             $table->unsignedInteger('count')->default(0);
             $table->datetime('expires_at')->nullable()->default(null);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

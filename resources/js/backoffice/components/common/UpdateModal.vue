@@ -13,6 +13,7 @@
 <script>
     import { markRaw } from "vue";
     import UserUpdate from "../users/UserUpdate.vue";
+    import DiscountUpdate from "../discounts/DiscountUpdate.vue";
 
     export default {
         props: {
@@ -49,6 +50,7 @@
             return {
                 components: {
                     user: markRaw(UserUpdate),
+                    discount: markRaw(DiscountUpdate),
                 },
             };
         },

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('type')->default('vino');
+            $table->string('type')->default('wine');
             $table->string('category')->nullable()->default(null);
             $table->string('link_rewrite');
             $table->string('name');
@@ -26,7 +26,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('limited_buy_for_user')->nullable()->default(null);
             $table->boolean('discountable')->default(true);
             $table->boolean('prevent_bankwire')->default(false);
-            $table->boolean('is_virtual')->default(true);
+            $table->boolean('is_virtual')->default(false);
             $table->json('meta_data');
             $table->enum('visibility', [
                 'public',

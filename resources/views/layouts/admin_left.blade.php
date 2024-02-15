@@ -38,13 +38,14 @@
     <div class="md:pl-64 flex flex-col flex-1">
         <header-menu-left-button></header-menu-left-button>
         <main class="flex-1">
-          <div class="py-6">
+          <div class="pt-3">
             @section('header')
             <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
               <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
             </div>
             @show
-            <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8">
+            @section('full_page')
+            <div class="max-w-8xl mx-auto px-4 sm:px-6 md:px-8 pb-3">
               @section('content')
               <!-- Replace with your content -->
               <div class="py-4">
@@ -53,6 +54,7 @@
               <!-- /End replace -->
               @show
             </div>
+            @show
           </div>
         </main>
       </div>

@@ -103,6 +103,7 @@ app.mixin({
 
 app.provide("emitter", emitter);
 
+import { createPinia } from "pinia";
 const pinia = createPinia();
 app.use(pinia);
 

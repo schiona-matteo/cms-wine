@@ -10,12 +10,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('shipments', function (Blueprint $table) {
+        Schema::create('attribute_values', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained();
-            $table->string('courier');
-            $table->string('tracking')->nullable()->default(null);
-            $table->json('data');
+            $table->foreignId('attribute_id')->constrained();
+            $table->string('name');
+            $table->string('value');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('shipments');
+        Schema::dropIfExists('attribute_values');
     }
 };
